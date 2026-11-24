@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Define a codificação para exibir corretamente os caracteres. -->
+    <meta charset="UTF-8">
+    <!-- Ajusta a largura do layout à tela do dispositivo. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título único e descritivo; mantenha-o próximo de 60 caracteres. -->
+    <title>Guia de Web Design: HTML, CSS e SEO</title>
+    <!-- Descrição curta que resume o conteúdo da página. -->
+    <meta name="description" content="Guia acadêmico de Web Design com fundamentos de HTML, CSS, JavaScript e boas práticas de SEO.">
+    <!-- Substitua pelo endereço público definitivo depois do deploy. -->
+    <link rel="canonical" href="https://SEU-DOMINIO-REAL.example/guia-web-design/">
+    <!-- Favicon demonstrativo; o arquivo está incluído na pasta assets. -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <!-- Estilo externo, separado da estrutura semântica. -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Metadados sociais básicos para compartilhamento. -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Guia de Web Design: HTML, CSS e SEO">
+    <meta property="og:description" content="Conceitos introdutórios de desenvolvimento web e otimização de páginas.">
+</head>
+<body>
+    <!-- Cabeçalho global da página. -->
+    <header class="site-header">
+        <p class="eyebrow">Apostila acadêmica</p>
+        <h1>Guia de Web Design: HTML, CSS e SEO</h1>
+        <p>Uma introdução à estrutura, à apresentação e à descoberta de páginas na web.</p>
+    </header>
+
+    <!-- Navegação principal com links que descrevem claramente o destino. -->
+    <nav aria-label="Navegação principal">
+        <ul>
+            <li><a href="#introducao">Introdução</a></li>
+            <li><a href="#html">HTML</a></li>
+            <li><a href="#css">CSS</a></li>
+            <li><a href="#seo">SEO</a></li>
+            <li><a href="#acessibilidade">Acessibilidade</a></li>
+        </ul>
+    </nav>
+
+    <main id="conteudo-principal">
+        <!-- Breadcrumb indica a posição desta página na hierarquia do site. -->
+        <nav aria-label="Você está aqui" class="breadcrumb">
+            <ol>
+                <li><a href="index.html">Início</a></li>
+                <li aria-current="page">Guia de Web Design</li>
+            </ol>
+        </nav>
+
+        <article>
+            <header class="article-header">
+                <h2 id="introducao">Introdução</h2>
+                <p>O desenvolvimento web combina organização de conteúdo, aparência visual e comportamento interativo.</p>
+            </header>
+
+            <figure>
+                <img src="assets/diagrama-web.svg" alt="Diagrama ilustrativo que relaciona HTML, CSS e JavaScript" width="720" height="360">
+                <figcaption>HTML estrutura; CSS apresenta; JavaScript adiciona comportamento.</figcaption>
+            </figure>
+
+            <section aria-labelledby="html">
+                <h2 id="html">Fundamentos do HTML</h2>
+                <p>HTML é uma linguagem de marcação usada para descrever a estrutura do conteúdo.</p>
+                <p>Os elementos devem ser escolhidos de acordo com o significado do conteúdo, não apenas pela aparência.</p>
+                <h3>Estrutura do documento</h3>
+                <p>Um documento HTML5 começa com a declaração do tipo de documento e informa o idioma no elemento raiz.</p>
+                <p>O elemento head reúne metadados; o body contém o conteúdo que será apresentado ao usuário.</p>
+                <h3>Elementos semânticos</h3>
+                <p>Header, nav, main, article, section, aside e footer ajudam a explicar a organização da página.</p>
+                <p>Uma hierarquia de títulos coerente facilita a leitura e a navegação assistiva.</p>
+            </section>
+
+            <section aria-labelledby="css">
+                <h2 id="css">Fundamentos do CSS</h2>
+                <p>CSS define cores, tipografia, espaçamentos, dimensões e layout dos elementos HTML.</p>
+                <p>O arquivo externo permite reaproveitar estilos e manter a apresentação separada da estrutura.</p>
+                <h3>Seletores e classes</h3>
+                <p>Seletores escolhem os elementos que receberão regras; classes podem ser reutilizadas em vários componentes.</p>
+                <p>IDs identificam um alvo específico na página e também podem funcionar como destino de links internos.</p>
+                <h3>Layout responsivo</h3>
+                <p>Flexbox e Grid ajudam a organizar componentes sem depender de posições fixas para cada tela.</p>
+                <p>Media queries podem ajustar a apresentação conforme a largura disponível.</p>
+            </section>
+
+            <section aria-labelledby="seo">
+                <h2 id="seo">O que é SEO?</h2>
+                <p>SEO reúne práticas para que mecanismos de busca compreendam, rastreiem e apresentem páginas relevantes.</p>
+                <p>SEO orgânico não é o mesmo que links patrocinados; anúncios dependem de campanhas pagas.</p>
+                <h3>Rastreamento e indexação</h3>
+                <p>O crawling é a descoberta e leitura de páginas por robôs dos mecanismos de busca.</p>
+                <p>Na indexação, o conteúdo é analisado e catalogado para possível exibição em pesquisas.</p>
+                <h3>Metadados</h3>
+                <p>Cada página deve ter título próprio e uma descrição clara que corresponda ao conteúdo real.</p>
+                <p>O canonical deve apontar para a versão preferencial de uma página quando há URLs equivalentes.</p>
+                <p>A viewport contribui para uma apresentação apropriada em dispositivos móveis.</p>
+            </section>
+
+            <section aria-labelledby="navegacao">
+                <h2 id="navegacao">Navegação e links</h2>
+                <p>Links devem usar textos descritivos para que o destino seja compreendido antes do clique.</p>
+                <p>Links internos conectam conteúdos relacionados e ajudam o visitante a explorar o site.</p>
+                <p>Breadcrumbs apresentam a hierarquia e permitem retornar a níveis anteriores.</p>
+                <h3>Exemplo de caminho</h3>
+                <ol>
+                    <li><a href="#introducao">Início do guia</a></li>
+                    <li><a href="#html">Fundamentos de HTML</a></li>
+                    <li><a href="#seo">Práticas de SEO</a></li>
+                </ol>
+            </section>
+
+            <section aria-labelledby="imagens">
+                <h2 id="imagens">Imagens e mídias</h2>
+                <p>O atributo alt descreve a informação relevante de uma imagem para pessoas que não a visualizam.</p>
+                <p>Use texto alternativo conciso e contextual; evite repetir palavras-chave artificialmente.</p>
+                <p>Declarar width e height ajuda o navegador a reservar espaço e reduz deslocamentos de layout.</p>
+                <figure>
+                    <img src="assets/diagrama-web.svg" alt="Ilustração com três blocos conectados representando a construção de uma página" width="720" height="360" loading="lazy">
+                    <figcaption>Imagem ilustrativa com dimensões explícitas e carregamento adiado.</figcaption>
+                </figure>
+            </section>
+
+            <section aria-labelledby="dados">
+                <h2 id="dados">Dados estruturados</h2>
+                <p>JSON-LD permite fornecer contexto estruturado sobre o conteúdo de uma página.</p>
+                <p>Os dados devem corresponder ao conteúdo visível e verdadeiro do documento.</p>
+            </section>
+
+            <section aria-labelledby="acessibilidade">
+                <h2 id="acessibilidade">Acessibilidade e experiência</h2>
+                <p>Rótulos claros, contraste adequado e foco de teclado ajudam diferentes pessoas a usar a página.</p>
+                <p>Não dependa somente de cor para transmitir informação importante.</p>
+                <p>Formulários devem associar cada campo a um label e apresentar instruções compreensíveis.</p>
+            </section>
+
+            <section aria-labelledby="desempenho">
+                <h2 id="desempenho">Desempenho e confiança</h2>
+                <p>Arquivos otimizados e carregamento eficiente contribuem para uma boa experiência.</p>
+                <p>HTTPS protege a comunicação entre navegador e servidor.</p>
+                <p>Conteúdo original, útil e atualizado deve ser priorizado em vez de repetição de palavras-chave.</p>
+            </section>
+
+
+            <section aria-labelledby="checklist-seo">
+                <h2 id="checklist-seo">Checklist de revisão antes da publicação</h2>
+                <p>Use esta lista para revisar a página; marcar um item não representa garantia de posicionamento.</p>
+                <ul class="checklist-seo">
+                    <li><strong>Idioma:</strong> confirme se o atributo lang corresponde ao idioma principal.</li>
+                    <li><strong>Título:</strong> escreva um título específico para a página.</li>
+                    <li><strong>Descrição:</strong> resuma o conteúdo sem prometer o que a página não oferece.</li>
+                    <li><strong>Canonical:</strong> informe a URL definitiva depois de publicar.</li>
+                    <li><strong>Headings:</strong> mantenha uma hierarquia lógica de títulos.</li>
+                    <li><strong>Links:</strong> use textos que expliquem o destino.</li>
+                    <li><strong>Imagens:</strong> escreva textos alternativos úteis para imagens informativas.</li>
+                    <li><strong>Dimensões:</strong> declare dimensões para reduzir mudanças inesperadas no layout.</li>
+                    <li><strong>Conteúdo:</strong> priorize informações originais, úteis e bem organizadas.</li>
+                    <li><strong>Dados estruturados:</strong> valide o JSON-LD e mantenha apenas dados verdadeiros.</li>
+                    <li><strong>Robots:</strong> confirme se a página deve ou não ser indexada.</li>
+                    <li><strong>Mobile:</strong> teste a leitura em telas pequenas.</li>
+                    <li><strong>Contraste:</strong> verifique a legibilidade do texto e dos controles.</li>
+                    <li><strong>Teclado:</strong> navegue pelos links e formulários sem usar o mouse.</li>
+                    <li><strong>Carregamento:</strong> reduza o peso desnecessário de imagens e arquivos.</li>
+                    <li><strong>HTTPS:</strong> publique em conexão segura quando o serviço estiver disponível.</li>
+                    <li><strong>Erros:</strong> procure links quebrados e imagens que não carregam.</li>
+                    <li><strong>Atualização:</strong> retire datas, preços e informações que estejam desatualizadas.</li>
+                    <li><strong>Pesquisa:</strong> teste se os termos usados no título refletem o assunto real.</li>
+                    <li><strong>Evidências:</strong> registre a ferramenta, a data e os resultados de auditorias externas.</li>
+                </ul>
+                <p class="nota-metodologica">SEO reúne várias práticas; nenhuma lista isolada garante uma posição específica nos buscadores.</p>
+            </section>
+
+            <section aria-labelledby="conclusao">
+                <h2 id="conclusao">Conclusão</h2>
+                <p>Uma página bem construída combina estrutura semântica, apresentação clara, acessibilidade e conteúdo relevante.</p>
+                <p>As práticas de SEO ajudam buscadores a entender o conteúdo, mas não garantem uma posição específica nos resultados.</p>
+            </section>
+
+            <footer class="article-footer">
+                <p>Material didático elaborado para estudo de Web Design.</p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <p>Exemplo acadêmico — substitua os dados de demonstração antes da publicação final.</p>
+        <a href="#conteudo-principal">Voltar ao início do conteúdo</a>
+    </footer>
+
+    <!-- Dados estruturados de artigo: revise autor, data e URL antes de publicar. -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Guia de Web Design: HTML, CSS e SEO",
+        "description": "Guia acadêmico sobre fundamentos de desenvolvimento web e SEO.",
+        "inLanguage": "pt-BR",
+        "author": {
+            "@type": "Organization",
+            "name": "Material didático independente"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://SEU-DOMINIO-REAL.example/guia-web-design/"
+        }
+    }
+    </script>
+</body>
+</html>

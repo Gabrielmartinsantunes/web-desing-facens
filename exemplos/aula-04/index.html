@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mídias e elementos HTML</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topo">
+        <p class="identificacao">Aula 04 · Atividade prática</p>
+        <h1>Mídias e componentes HTML</h1>
+        <p>Uma página de demonstração com imagens, áudio, vídeo e elementos de formulário.</p>
+    </header>
+
+    <main class="conteudo">
+        <section aria-labelledby="imagens">
+            <h2 id="imagens">1. Imagens</h2>
+            <div class="grade-imagens">
+                <figure>
+                    <img src="assets/images/imagem-1.svg" alt="Ilustração didática de montanhas sob um céu colorido" width="320" height="200">
+                    <figcaption>Imagem com largura e altura informadas.</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/imagem-2.svg" alt="Ilustração didática de arquitetura e edifícios" width="320" height="200">
+                    <figcaption>Segunda imagem com dimensões explícitas.</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/imagem-3.svg" alt="Ilustração didática de natureza e folhagem">
+                    <figcaption>Terceira imagem sem width e height, conforme o teste do enunciado.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section aria-labelledby="video">
+            <h2 id="video">2. Vídeo</h2>
+            <video controls width="640" poster="assets/images/imagem-1.svg">
+                <source src="assets/video/video.mp4" type="video/mp4">
+                Seu navegador não suporta vídeo HTML5. Coloque um arquivo em assets/video/video.mp4.
+            </video>
+            <p class="observacao">Teste retirar o atributo <code>controls</code>: os controles de reprodução deixam de ser exibidos.</p>
+        </section>
+
+        <section aria-labelledby="audio">
+            <h2 id="audio">3. Áudio</h2>
+            <audio controls>
+                <source src="assets/audio/musica.mp3" type="audio/mpeg">
+                <source src="assets/audio/musica.ogg" type="audio/ogg">
+                Seu navegador não suporta áudio.
+            </audio>
+            <p class="observacao">Os arquivos MP3 e OGG não foram fornecidos nos anexos. Adicione os arquivos com esses nomes para testar os dois formatos.</p>
+        </section>
+
+        <section aria-labelledby="formulario">
+            <h2 id="formulario">4. Formulário</h2>
+            <form action="#" method="get">
+                <label for="nome">Nome</label>
+                <input id="nome" name="nome" type="text" required>
+
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" required>
+
+                <label for="mensagem">Mensagem</label>
+                <textarea id="mensagem" name="mensagem" rows="4"></textarea>
+
+                <button type="submit">Enviar formulário de demonstração</button>
+            </form>
+            <p class="observacao">O formulário não envia dados para um servidor. Ele demonstra a estrutura e a validação básica do navegador.</p>
+        </section>
+
+        <section aria-labelledby="links">
+            <h2 id="links">5. Links</h2>
+            <p><a href="https://www.google.com/">Abrir o Google em texto simples</a></p>
+            <p><a href="https://www.google.com/" aria-label="Abrir o Google por meio de uma imagem">
+                <img class="imagem-link" src="assets/images/imagem-2.svg" alt="Ilustração clicável para acessar o Google" width="160" height="100">
+            </a></p>
+            <p><a href="https://www.google.com/" target="_blank" rel="noopener noreferrer">Abrir o Google em uma nova aba</a></p>
+        </section>
+
+        <section aria-labelledby="listas">
+            <h2 id="listas">6. Listas</h2>
+            <h3>Lista ordenada — passos</h3>
+            <ol>
+                <li>Planejar a estrutura.</li>
+                <li>Escrever o HTML.</li>
+                <li>Testar no navegador.</li>
+            </ol>
+            <h3>Lista não ordenada — itens</h3>
+            <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="tabela">
+            <h2 id="tabela">7. Tabela</h2>
+            <table>
+                <thead>
+                    <tr><th scope="col">Tecnologia</th><th scope="col">Função</th><th scope="col">Exemplo</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>HTML</td><td>Estrutura</td><td>section</td></tr>
+                    <tr><td>CSS</td><td>Apresentação</td><td>color</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section aria-labelledby="ids-classes">
+            <h2 id="ids-classes">8. IDs e classes</h2>
+            <p id="introducao">Este parágrafo possui o ID introducao para identificar um alvo único.</p>
+            <p class="destaque">Este é o primeiro parágrafo em destaque.</p>
+            <p class="destaque">Este é o segundo parágrafo em destaque.</p>
+        </section>
+
+        <section aria-labelledby="container">
+            <h2 id="container">9. Div como contêiner</h2>
+            <div class="caixa-explicativa">
+                <h3>Conteúdo agrupado</h3>
+                <p>A div agrupa elementos que compartilham uma finalidade visual ou de organização.</p>
+                <p>Ela não possui significado semântico próprio; use elementos semânticos quando forem adequados.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rodape">
+        <p>Exemplo didático de Mídias em HTML — Web Design.</p>
+    </footer>
+</body>
+</html>

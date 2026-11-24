@@ -1,0 +1,391 @@
+/* ==========================================================
+   AULA 07 — BOX MODEL E FLEXBOX
+   Content, padding, border e margin são demonstrados em 20 cards.
+   ========================================================== */
+* , *::before, *::after { box-sizing: border-box; }
+:root { font-family: Arial, Helvetica, sans-serif; color: #26343d; background: #f4f1e9; line-height: 1.6; }
+body { margin: 0; min-width: 320px; }
+.cabecalho-site { padding: 2.5rem max(1rem, calc((100% - 1100px) / 2)); color: #fff; background: #263f4c; }
+.cabecalho-site h1 { margin: .2rem 0; font-family: Georgia, serif; font-size: clamp(2.2rem, 5vw, 4rem); }
+.selo { color: #e4bd7b; text-transform: uppercase; letter-spacing: .12em; }
+.nav-site { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem; padding: 1rem; background: #e6e0d4; }
+.nav-site a { color: #263f4c; font-weight: 700; text-decoration: none; }
+.conteudo-principal { width: min(1100px, calc(100% - 2rem)); margin-inline: auto; }
+.secao { padding-block: 2.5rem; }
+.secao-cabecalho { max-width: 760px; margin-bottom: 1.5rem; }
+.secao h2 { font-family: Georgia, serif; color: #31596b; }
+.grade-boxes { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; align-items: stretch; }
+.box-demo { min-width: 0; background: #fff; }
+.box-numero { display: inline-grid; place-items: center; width: 34px; height: 34px; background: #31596b; border-radius: 50%; color: #fff; font-weight: 700; }
+.box-demo h3 { margin-top: .8rem; color: #31596b; }
+.box-demo p { color: #53636b; }
+.box-demo .medida { font-size: .8rem; font-weight: 700; letter-spacing: .04em; }
+.secao-escura { padding: 2rem; background: #e8eeea; border-radius: 18px; }
+.experimento-flex { margin: 1rem 0; padding: 1.2rem; border: 1px solid #cbd4d1; border-radius: 10px; background: #fff; }
+.experimento-flex h3 { margin-top: 0; }
+.codigo-propriedade { font-family: Consolas, monospace; color: #8b412d; }
+.flex-container { display: flex; min-height: 90px; padding: .8rem; border: 2px dashed #b7c7c3; background: #f6f8f6; }
+.flex-item { padding: .8rem 1.1rem; border: 1px solid #31596b; border-radius: 6px; background: #dce8e8; color: #233b47; font-weight: 700; }
+.rodape-site { margin-top: 2rem; padding: 1.5rem; background: #263f4c; color: #fff; text-align: center; }
+.rodape-site p { margin: 0; }
+a:focus-visible { outline: 3px solid #c48a37; outline-offset: 3px; }
+
+/* Box Model 01: valores definidos para as quatro regiões. */
+.box-01 {
+    margin: 12px;
+    padding: 13px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 02: valores definidos para as quatro regiões. */
+.box-02 {
+    margin: 16px;
+    padding: 16px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 03: valores definidos para as quatro regiões. */
+.box-03 {
+    margin: 8px;
+    padding: 19px;
+    border: 1px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 04: valores definidos para as quatro regiões. */
+.box-04 {
+    margin: 12px;
+    padding: 10px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 05: valores definidos para as quatro regiões. */
+.box-05 {
+    margin: 16px;
+    padding: 13px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 06: valores definidos para as quatro regiões. */
+.box-06 {
+    margin: 8px;
+    padding: 16px;
+    border: 1px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 07: valores definidos para as quatro regiões. */
+.box-07 {
+    margin: 12px;
+    padding: 19px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 08: valores definidos para as quatro regiões. */
+.box-08 {
+    margin: 16px;
+    padding: 10px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 09: valores definidos para as quatro regiões. */
+.box-09 {
+    margin: 8px;
+    padding: 13px;
+    border: 1px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 10: valores definidos para as quatro regiões. */
+.box-10 {
+    margin: 12px;
+    padding: 16px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 11: valores definidos para as quatro regiões. */
+.box-11 {
+    margin: 16px;
+    padding: 19px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 12: valores definidos para as quatro regiões. */
+.box-12 {
+    margin: 8px;
+    padding: 10px;
+    border: 1px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 13: valores definidos para as quatro regiões. */
+.box-13 {
+    margin: 12px;
+    padding: 13px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 14: valores definidos para as quatro regiões. */
+.box-14 {
+    margin: 16px;
+    padding: 16px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 15: valores definidos para as quatro regiões. */
+.box-15 {
+    margin: 8px;
+    padding: 19px;
+    border: 1px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 16: valores definidos para as quatro regiões. */
+.box-16 {
+    margin: 12px;
+    padding: 10px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 17: valores definidos para as quatro regiões. */
+.box-17 {
+    margin: 16px;
+    padding: 13px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 18: valores definidos para as quatro regiões. */
+.box-18 {
+    margin: 8px;
+    padding: 16px;
+    border: 1px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 19: valores definidos para as quatro regiões. */
+.box-19 {
+    margin: 12px;
+    padding: 19px;
+    border: 2px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Box Model 20: valores definidos para as quatro regiões. */
+.box-20 {
+    margin: 16px;
+    padding: 10px;
+    border: 3px solid #8da5a4;
+    min-height: 190px;
+    background-color: #ffffff;
+}
+
+/* Experimento Flexbox 01: Linha com espaço entre itens. */
+.linha-com-espaco {
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 02: Coluna centralizada. */
+.coluna-central {
+    flex-direction: column; align-items: center;
+    gap: 16px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 03: Itens com quebra e centro. */
+.wrap-central {
+    flex-wrap: wrap; justify-content: center;
+    gap: 20px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 04: Espaço ao redor. */
+.distribuicao-ao-redor {
+    justify-content: space-around;
+    gap: 8px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 05: Alinhamento ao final. */
+.alinhamento-final {
+    align-items: flex-end;
+    gap: 12px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 06: Alinhamento inicial. */
+.alinhamento-inicial {
+    align-items: flex-start;
+    gap: 16px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 07: Itens com crescimento. */
+.crescimento {
+    flex-grow: 1;
+    gap: 20px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 08: Base flexível. */
+.base-flexivel {
+    flex-basis: 180px;
+    gap: 8px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 09: Ordem visual. */
+.ordem-itens {
+    order: 2;
+    gap: 12px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 10: Alinhamento individual. */
+.alinhamento-proprio {
+    align-self: center;
+    gap: 16px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 11: Espaçamento em linha. */
+.gap-linha {
+    column-gap: 1.5rem;
+    gap: 20px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 12: Espaçamento em coluna. */
+.gap-coluna {
+    row-gap: 1.5rem;
+    gap: 8px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 13: Uma linha contínua. */
+.sem-quebra {
+    flex-wrap: nowrap;
+    gap: 12px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 14: Quebra reversa. */
+.quebra-reversa {
+    flex-wrap: wrap-reverse;
+    gap: 16px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 15: Linha reversa. */
+.direcao-reversa {
+    flex-direction: row-reverse;
+    gap: 20px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 16: Itens com altura esticada. */
+.altura-igual {
+    align-items: stretch;
+    gap: 8px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 17: Conteúdo centralizado. */
+.conteudo-centro {
+    align-content: center;
+    gap: 12px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 18: Espaçamento uniforme. */
+.espaco-uniforme {
+    justify-content: space-evenly;
+    gap: 16px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 19: Redução controlada. */
+.shrink-controlado {
+    flex-shrink: 0;
+    gap: 20px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Experimento Flexbox 20: Atalho flex. */
+.atalho-flex {
+    flex: 1 1 210px;
+    gap: 8px;
+    min-height: 110px;
+    align-content: center;
+}
+
+/* Responsividade: em telas estreitas, itens podem quebrar e ocupar a linha. */
+@media (max-width: 700px) {
+    .cabecalho-site { padding: 2rem 1rem; }
+    .secao-escura { padding: 1rem; }
+    .flex-container { flex-wrap: wrap; }
+    .flex-item { flex: 1 1 120px; }
+}
+@media (max-width: 420px) {
+    .nav-site { align-items: flex-start; flex-direction: column; gap: .7rem; }
+    .box-demo { margin: .4rem; padding: 1rem; }
+    .experimento-flex { padding: .8rem; }
+}
+
+/* Tabela auxiliar com leitura horizontal em telas estreitas. */
+.tabela-responsiva { overflow-x: auto; margin-block: 1rem; }
+.tabela-responsiva table { width: 100%; border-collapse: collapse; background: #fff; }
+.tabela-responsiva th, .tabela-responsiva td { padding: .7rem; border: 1px solid #cbd4d1; text-align: left; }
+.tabela-responsiva thead { background: #e7eef0; color: #23495b; }
+.tabela-responsiva code { font-weight: 700; color: #8a4d2d; }
