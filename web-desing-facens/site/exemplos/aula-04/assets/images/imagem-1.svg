@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400" role="img" aria-labelledby="titulo desc">
+  <title id="titulo">Paisagem de exemplo</title>
+  <desc id="desc">Ilustração vetorial didática de Montanhas.</desc>
+  <rect width="640" height="400" fill="#2d6673"/>
+  <circle cx="500" cy="95" r="48" fill="#e3b867"/>
+  <path d="M0 310 L155 120 L310 310 Z" fill="#e3b867" opacity=".9"/>
+  <path d="M190 310 L390 80 L640 310 Z" fill="#f6efe0" opacity=".9"/>
+  <path d="M0 310 Q160 255 320 320 T640 310 V400 H0 Z" fill="#243d4c" opacity=".55"/>
+  <text x="36" y="360" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">Montanhas</text>
+</svg>

@@ -1,0 +1,470 @@
+/* ==========================================================
+   AULA 08 — CSS DO PAINEL INTERATIVO
+   Este arquivo cuida da apresentação; a lógica está em script.js.
+   ========================================================== */
+:root {
+    --fundo: #f3f0e8;
+    --superficie: #ffffff;
+    --texto: #253740;
+    --texto-suave: #59676d;
+    --azul: #315b70;
+    --terracota: #a64f35;
+    --dourado: #e6c48a;
+    --borda: #d8d8cf;
+    --sombra: 0 12px 30px rgb(32 51 61 / 8%);
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--texto);
+    background: var(--fundo);
+    line-height: 1.6;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: var(--fundo); color: var(--texto); }
+body.tema-escuro { --fundo: #18262d; --superficie: #243740; --texto: #edf2ef; --texto-suave: #c0cecf; --borda: #41555d; --sombra: 0 12px 30px rgb(0 0 0 / 24%); }
+.container { width: min(1100px, calc(100% - 2rem)); margin-inline: auto; }
+.cabecalho { padding: 3rem 0; background: var(--azul); color: #fff; }
+.cabecalho h1 { max-width: 760px; margin: .3rem 0 1rem; font-family: Georgia, serif; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1.1; }
+.cabecalho p { max-width: 700px; color: #f1f4f2; }
+.eyebrow { margin-bottom: .4rem; color: var(--terracota); font-size: .76rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.cabecalho .eyebrow { color: var(--dourado); }
+.navegacao { display: flex; flex-wrap: wrap; gap: .8rem 1.4rem; padding-block: 1rem; }
+.navegacao a { color: var(--azul); font-weight: 700; text-decoration: none; }
+.tema-escuro .navegacao a { color: #d9e8e9; }
+.conteudo { display: grid; gap: 1.4rem; padding-block: 1rem 3rem; }
+.painel { padding: clamp(1.1rem, 3vw, 2rem); border: 1px solid var(--borda); border-radius: 16px; background: var(--superficie); box-shadow: var(--sombra); }
+.painel-cabecalho { max-width: 760px; margin-bottom: 1.3rem; }
+.painel h2 { margin: .2rem 0 .5rem; font-family: Georgia, serif; font-size: clamp(1.5rem, 4vw, 2.1rem); }
+.painel p { color: var(--texto-suave); }
+label { display: block; margin-bottom: .4rem; font-weight: 700; }
+input, select { width: 100%; min-height: 44px; padding: .65rem .75rem; border: 1px solid #98a9ad; border-radius: 8px; background: var(--superficie); color: var(--texto); font: inherit; }
+input:focus, select:focus { outline: 3px solid var(--dourado); outline-offset: 2px; }
+.botao { min-height: 44px; padding: .65rem 1rem; border: 1px solid var(--terracota); border-radius: 8px; background: var(--terracota); color: #fff; font: inherit; font-weight: 700; cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
+.botao:hover { transform: translateY(-2px); opacity: .92; }
+.botao-secundario { border-color: var(--azul); background: transparent; color: var(--azul); }
+.cabecalho .botao-secundario { color: #fff; }
+.botao-link { margin-top: .8rem; padding: .3rem 0; border: 0; background: transparent; color: var(--azul); font: inherit; text-decoration: underline; cursor: pointer; }
+.resultado { margin-top: 1rem; padding: .9rem 1rem; border-left: 4px solid var(--dourado); border-radius: 0 8px 8px 0; background: color-mix(in srgb, var(--dourado) 17%, var(--superficie)); }
+.contador-linha { display: flex; align-items: center; gap: 1rem; }
+#valor-contador { min-width: 3ch; font-size: 2.2rem; font-weight: 700; text-align: center; }
+.campos-notas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.form-tarefa { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: .8rem; }
+.form-tarefa label { grid-column: 1 / -1; margin-bottom: -.5rem; }
+.lista-tarefas { display: grid; gap: .5rem; padding-left: 1.2rem; }
+.lista-tarefas li { padding: .6rem .8rem; border: 1px solid var(--borda); border-radius: 8px; }
+.lista-tarefas button { margin-left: .8rem; border: 0; background: transparent; color: var(--terracota); cursor: pointer; }
+.grade-conteudos, .grade-conceitos { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .8rem; margin-top: 1rem; }
+.conteudo-card, .cartao-conceito { padding: 1rem; border: 1px solid var(--borda); border-radius: 10px; background: var(--superficie); }
+.conteudo-card h3, .cartao-conceito h3 { margin: .5rem 0; color: var(--azul); }
+.numero-conceito { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--azul); color: #fff; font-size: .8rem; font-weight: 700; }
+.painel-resumo { border-top: 5px solid var(--dourado); }
+.rodape { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1.5rem max(1rem, calc((100% - 1100px) / 2)); background: #243a46; color: #fff; }
+.rodape p { margin: 0; color: #fff; }
+.rodape a { color: var(--dourado); }
+[hidden] { display: none !important; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--dourado); outline-offset: 3px; }
+@media (max-width: 680px) { .campos-notas { grid-template-columns: 1fr; } .form-tarefa { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .navegacao { flex-direction: column; } .contador-linha { justify-content: flex-start; } .rodape { flex-direction: column; } }
+
+/* Cartão 01: Variáveis. */
+.conceito-01 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-01:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 02: Escopo. */
+.conceito-02 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-02:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 03: Tipos de dados. */
+.conceito-03 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-03:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 04: Case sensitive. */
+.conceito-04 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-04:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 05: Aritmética. */
+.conceito-05 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-05:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 06: Comparação. */
+.conceito-06 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-06:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 07: Lógica. */
+.conceito-07 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-07:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 08: Atribuição. */
+.conceito-08 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-08:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 09: Condicionais. */
+.conceito-09 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-09:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 10: Ternário. */
+.conceito-10 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-10:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 11: for. */
+.conceito-11 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-11:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 12: while. */
+.conceito-12 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-12:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 13: do...while. */
+.conceito-13 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-13:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 14: break. */
+.conceito-14 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-14:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 15: continue. */
+.conceito-15 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-15:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 16: Funções. */
+.conceito-16 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-16:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 17: return. */
+.conceito-17 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-17:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 18: Arrow functions. */
+.conceito-18 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-18:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 19: Arrays. */
+.conceito-19 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-19:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 20: length. */
+.conceito-20 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-20:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 21: forEach. */
+.conceito-21 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-21:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 22: filter. */
+.conceito-22 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-22:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 23: Objetos. */
+.conceito-23 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-23:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 24: this. */
+.conceito-24 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-24:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 25: DOM. */
+.conceito-25 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-25:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 26: querySelector. */
+.conceito-26 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-26:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 27: getElementById. */
+.conceito-27 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-27:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 28: textContent. */
+.conceito-28 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-28:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 29: value. */
+.conceito-29 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-29:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 30: classList. */
+.conceito-30 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-30:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 31: createElement. */
+.conceito-31 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-31:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 32: appendChild. */
+.conceito-32 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-32:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 33: addEventListener. */
+.conceito-33 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-33:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 34: click. */
+.conceito-34 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-34:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 35: input. */
+.conceito-35 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-35:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 36: console.log. */
+.conceito-36 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-36:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 37: alert e prompt. */
+.conceito-37 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-37:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 38: Validação. */
+.conceito-38 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-38:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 39: Reutilização. */
+.conceito-39 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-39:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartão 40: Leitura de código. */
+.conceito-40 {
+    border-top: 3px solid var(--azul);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.conceito-40:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+/* Cartões do caderno complementar de sintaxe. */
+.cartao-conceito pre { overflow-x: auto; padding: .65rem; border-radius: 6px; background: #263b45; color: #f7f3eb; font-size: .78rem; line-height: 1.45; }
+.cartao-conceito pre code { color: inherit; white-space: pre-wrap; }
+.conceito-41, .conceito-45, .conceito-49, .conceito-53, .conceito-57, .conceito-61, .conceito-65, .conceito-69 { border-top: 3px solid var(--dourado); }

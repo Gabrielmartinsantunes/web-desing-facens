@@ -1,0 +1,18 @@
+/* Estilos externos da atividade de Fundamentos do HTML. */
+* { box-sizing: border-box; }
+body { margin: 0; padding: 1.5rem; color: #24313a; background: #f6f4ef; font-family: Georgia, serif; line-height: 1.7; }
+#cabecalho, nav, main, footer { max-width: 900px; margin: 0 auto 1.5rem; }
+#cabecalho { padding: 1.5rem; background: #e7edf0; border-bottom: 4px solid #48616f; }
+.titulo-centro { text-align: center; }
+.titulo-esquerda { text-align: left; }
+.titulo-direita { text-align: right; }
+nav { padding: .5rem 1rem; background: #fff; border: 1px solid #d9d3c8; }
+a { color: #1b5b7a; }
+a:hover { color: #a64b32; }
+.post, #lateral { margin: 1rem 0; padding: 1.5rem; background: #fff; border: 1px solid #ddd6ca; border-radius: 10px; }
+.post header { border-bottom: 1px solid #e4dfd6; }
+.sublinhado { text-decoration: underline; text-decoration-thickness: 2px; }
+.riscado { text-decoration: line-through; }
+.center { margin: 1rem 0; padding: 1rem; text-align: center; background: #f1e9d7; }
+.justificado { text-align: justify; }
+#rodape { padding: 1rem; text-align: center; color: #fff; background: #243d4c; }

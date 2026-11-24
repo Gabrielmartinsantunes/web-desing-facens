@@ -1,0 +1,28 @@
+/* Estilos externos da página de mídias. */
+* { box-sizing: border-box; }
+body { margin: 0; background: #f4f1e9; color: #26343d; font-family: Arial, Helvetica, sans-serif; line-height: 1.6; }
+.topo { padding: 2.5rem max(1rem, calc((100% - 1000px) / 2)); color: #fff; background: #263f4c; }
+.topo h1 { margin: .2rem 0; font-family: Georgia, serif; }
+.identificacao { color: #edc681; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; }
+.conteudo { width: min(1000px, calc(100% - 2rem)); margin: 2rem auto; }
+section { margin: 1.5rem 0; padding: 1.5rem; background: #fff; border: 1px solid #ded7ca; border-radius: 12px; }
+h2 { color: #31596b; }
+.grade-imagens { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+figure { margin: 0; }
+figure img { display: block; width: 100%; height: auto; border-radius: 8px; }
+figcaption, .observacao { color: #59636a; font-size: .9rem; }
+video { display: block; max-width: 100%; height: auto; border-radius: 8px; background: #202a30; }
+audio { max-width: 100%; }
+form { display: grid; gap: .65rem; max-width: 560px; }
+input, textarea { width: 100%; padding: .7rem; border: 1px solid #9aa7ad; border-radius: 6px; font: inherit; }
+button { width: fit-content; padding: .75rem 1rem; border: 0; border-radius: 7px; background: #9d4b32; color: #fff; font: inherit; cursor: pointer; }
+button:hover { background: #783822; }
+.imagem-link { display: inline-block; border: 2px solid #31596b; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: .7rem; border: 1px solid #bfc7c8; text-align: left; }
+th { background: #e5edf0; }
+#introducao { padding: .8rem; background: #e9f1f2; }
+.destaque { padding: .7rem; background: #fff1b9; border-left: 4px solid #c18d32; }
+.caixa-explicativa { padding: 1rem; border: 2px solid #cad6d9; background: #f7f9f8; }
+.rodape { padding: 1.5rem; text-align: center; background: #263f4c; color: #fff; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #d69c38; outline-offset: 2px; }

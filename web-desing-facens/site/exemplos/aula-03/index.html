@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Blog — Primeiro Post</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Cabeçalho principal com todos os níveis solicitados na atividade. -->
+    <header id="cabecalho">
+        <h1 class="titulo-centro">Meu Blog</h1>
+        <h2 class="titulo-esquerda">Um espaço para aprender HTML</h2>
+        <h3 class="titulo-direita">Fundamentos do HTML5</h3>
+        <h4>Quarto nível de título</h4>
+        <h5>Quinto nível de título</h5>
+        <h6>Sexto nível de título</h6>
+    </header>
+
+    <!-- Navegação por âncoras para seções que estão na mesma página. -->
+    <nav aria-label="Navegação principal">
+        <p>
+            <a href="#posts">Posts</a>
+            |
+            <a href="#lateral">Lateral</a>
+            |
+            <a href="#rodape">Rodapé</a>
+        </p>
+    </nav>
+
+    <main>
+        <!-- A seção agrupa artigos relacionados. -->
+        <section id="posts" aria-labelledby="titulo-posts">
+            <h2 id="titulo-posts">Publicações</h2>
+            <article class="post">
+                <header>
+                    <h2>Meu Blog – Primeiro Post</h2>
+                    <p>Publicado para praticar estrutura e semântica HTML.</p>
+                </header>
+
+                <!-- strong e em dão ênfase semântica; sub e sup mostram índices. -->
+                <p>
+                    Este texto demonstra <strong>negrito com significado</strong>,
+                    <em>itálico com ênfase</em>,
+                    <span class="sublinhado">sublinhado via CSS</span> e
+                    <span class="riscado">texto riscado via CSS</span>.
+                    A fórmula da água é H<sub>2</sub>O e uma potência pode ser 2<sup>3</sup>.
+                </p>
+
+                <!-- O item pede CSS inline, usado aqui apenas para cumprir a atividade. -->
+                <p style="color: blue; font-size: 1.25rem;">
+                    Este texto está azul e possui tamanho de fonte maior.
+                </p>
+
+                <!-- A classe é definida na folha de estilos externa. -->
+                <div class="center">
+                    Este texto está centralizado.
+                </div>
+
+                <!-- A quebra de linha mantém o conteúdo no mesmo parágrafo. -->
+                <p class="justificado">
+                    O HTML organiza o conteúdo de uma página por meio de elementos que
+                    descrevem títulos, parágrafos, seções e links. A estrutura correta
+                    facilita a leitura e a manutenção do projeto.<br>
+                    Esta frase aparece depois da quebra de linha, ainda no mesmo parágrafo.
+                </p>
+            </article>
+        </section>
+
+        <!-- Conteúdo complementar relacionado, mas separado do artigo principal. -->
+        <aside id="lateral">
+            <h3>Conteúdo Relacionado</h3>
+            <p>HTML define a estrutura; CSS define a apresentação; JavaScript acrescenta comportamento.</p>
+        </aside>
+    </main>
+
+    <!-- Rodapé da página. -->
+    <footer id="rodape">
+        <p>© 2025 – Exemplo didático de HTML da Aula</p>
+    </footer>
+</body>
+</html>
