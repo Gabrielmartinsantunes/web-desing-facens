@@ -1,1 +1,0 @@
-O arquivo video.mp4 é citado no exercício, mas não foi fornecido entre os materiais recebidos. Coloque o arquivo de vídeo real nesta pasta com o nome video.mp4 para testar o elemento <video>.

@@ -1,1 +1,0 @@
-Os arquivos musica.mp3 e musica.ogg são citados no exercício, mas não foram fornecidos entre os materiais recebidos. Coloque os arquivos de áudio reais nesta pasta com esses nomes para testar o elemento <audio>.
