@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Site didático complementar da Aula 01 de Web Design: visão geral da disciplina, avaliações e organização do grupo.">
+  <title>Aula 01 | Apresentação de Web Design</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Aula 01 — início">
+      <span class="brand-mark">WD</span>
+      <span><strong>WEB DESIGN</strong><small>FACENS · AULA 01</small></span>
+    </a>
+    <nav aria-label="Navegação principal">
+      <a href="#disciplina">Disciplina</a>
+      <a href="#avaliacoes">Avaliações</a>
+      <a href="#grupo">Formação do grupo</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <p class="eyebrow">Caderno de estudos · Aula 01</p>
+        <h1>Da primeira ideia à <em>experiência digital.</em></h1>
+        <p class="lead">Uma introdução ao que vamos estudar em Web Design: estrutura, aparência, interatividade e colaboração no desenvolvimento de projetos para a web.</p>
+        <a class="primary-link" href="#disciplina">Conhecer a disciplina <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-art" aria-label="Representação visual de uma interface web">
+        <div class="browser-window">
+          <div class="browser-bar"><i></i><i></i><i></i><span>projeto-web.dev</span></div>
+          <div class="mock-layout"><div class="mock-sidebar"></div><div class="mock-content"><b></b><b></b><div class="mock-cards"><span></span><span></span><span></span></div><div class="mock-line"></div></div></div>
+        </div>
+        <span class="art-note">Planejar · Construir · Aprimorar</span>
+      </div>
+    </section>
+
+    <section class="section" id="disciplina">
+      <div class="section-heading">
+        <p class="eyebrow">01 · Visão geral</p>
+        <h2>O que é Web Design?</h2>
+        <p>Nos slides, Web Design é apresentado como a combinação de design visual e tecnologias web para criar interfaces digitais funcionais e atraentes.</p>
+      </div>
+      <div class="discipline-grid">
+        <article class="topic-card topic-html"><span class="topic-number">01</span><h3>Estrutura</h3><p>Organizar o conteúdo e dar significado às informações que aparecem na página.</p><span class="topic-tag">HTML</span></article>
+        <article class="topic-card topic-css"><span class="topic-number">02</span><h3>Apresentação</h3><p>Definir cores, tipografia, espaçamento, alinhamento e a identidade visual.</p><span class="topic-tag">CSS</span></article>
+        <article class="topic-card topic-js"><span class="topic-number">03</span><h3>Interatividade</h3><p>Adicionar comportamento e permitir que a interface responda às ações do usuário.</p><span class="topic-tag">JavaScript</span></article>
+      </div>
+    </section>
+
+    <section class="section assessments" id="avaliacoes">
+      <div class="section-heading">
+        <p class="eyebrow">02 · Critérios apresentados</p>
+        <h2>Como a aprendizagem será avaliada</h2>
+        <p>Resumo dos formatos descritos na apresentação da disciplina. Consulte o Canvas e as orientações do docente para os requisitos e prazos vigentes.</p>
+      </div>
+      <div class="assessment-list">
+        <article><span class="assessment-code">AC1</span><div><h3>Prova escrita</h3><p>Questões de múltipla escolha para verificar a compreensão teórica e a aplicação dos conceitos trabalhados.</p></div><strong class="assessment-weight">15%</strong></article>
+        <article><span class="assessment-code">AC2</span><div><h3>Entrega e apresentação do projeto</h3><p>Foco no processo de gestão, backlog, páginas desenvolvidas e análise de benchmarking. Avaliação em grupo.</p></div><strong class="assessment-weight">30%</strong></article>
+        <article><span class="assessment-code">AG</span><div><h3>Avaliação Geral</h3><p>O slide informa o peso desta avaliação, mas não detalha seu formato na apresentação recebida.</p></div><strong class="assessment-weight">10%</strong></article>
+        <article><span class="assessment-code">AF</span><div><h3>Documentação final</h3><p>Documentação em formato de “mini TCC”, cobrindo planejamento, execução, resultados, desafios e soluções. Avaliação em grupo.</p></div><strong class="assessment-weight">45%</strong></article>
+      </div>
+    </section>
+
+    <section class="section group-section" id="grupo">
+      <div class="group-intro">
+        <p class="eyebrow">03 · Primeira atividade</p>
+        <h2>Organize seu grupo</h2>
+        <p>A atividade indicada na Aula 01 solicita grupos de <strong>3 a 5 integrantes</strong>. A mesma composição deve ser mantida nas atividades semanais, na AC2 e na AF de projeto.</p>
+        <ol class="steps">
+          <li>Confirme os integrantes e a composição do grupo.</li>
+          <li>Confira a grafia dos nomes completos.</li>
+          <li>Prepare um arquivo com a lista de participantes.</li>
+          <li>Envie o documento na primeira atividade da disciplina no Canvas.</li>
+        </ol>
+      </div>
+      <aside class="check-panel" aria-labelledby="check-title">
+        <div class="check-panel-head"><span>CHECKLIST DE APOIO</span><span class="check-icon">✓</span></div>
+        <h3 id="check-title">Seu grupo está pronto?</h3>
+        <label for="member-count">Quantidade de integrantes</label>
+        <div class="number-control"><button type="button" id="decrease" aria-label="Diminuir quantidade">−</button><input id="member-count" type="number" min="1" max="10" value="3" inputmode="numeric"><button type="button" id="increase" aria-label="Aumentar quantidade">+</button></div>
+        <p id="group-status" class="status" role="status" aria-live="polite">3 integrantes: dentro da orientação dos slides.</p>
+        <div class="checklist">
+          <label><input type="checkbox"> Nomes completos conferidos</label>
+          <label><input type="checkbox"> Documento preparado</label>
+          <label><input type="checkbox"> Arquivo enviado no Canvas</label>
+        </div>
+        <p class="small-note">Este checklist funciona apenas nesta página. Ele não salva dados nem envia arquivos ao Canvas.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div><strong>WEB DESIGN · FACENS</strong><p>Site didático complementar elaborado para estudo da Aula 01.</p></div>
+    <p class="disclaimer">Material independente. Não é site oficial da FACENS e não substitui as instruções do docente ou do Canvas.</p>
+  </footer>
+</body>
+</html>

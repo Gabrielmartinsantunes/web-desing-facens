@@ -54,3 +54,20 @@ Um documento com os nomes completos do grupo, enviado pelo Canvas. Não há uma 
 ## Limitação da resolução
 
 Os slides não informam os nomes do grupo do estudante nem apresentam um modelo oficial de arquivo. Por isso, o modelo acima é apenas uma estrutura de preenchimento, não um documento oficial da FACENS.
+
+
+## Site independente da Aula 01
+
+O repositório também inclui um site demonstrativo em `exemplos/aula-01/`, com uma apresentação visual da disciplina, resumo dos formatos de avaliação descritos nos slides e um checklist de apoio para a formação do grupo. Esse site é complementar e autoral: a atividade original desta aula continua sendo organizar o grupo de 3 a 5 integrantes e enviar a lista de nomes completos pelo Canvas. O checklist não salva dados nem envia informações ao Canvas.
+
+
+## Critérios de avaliação apresentados nos slides
+
+| Avaliação | Peso | Descrição disponível no PDF |
+|---|---:|---|
+| Avaliação Continuada 1 (AC1) | 15% | Prova escrita de múltipla escolha. |
+| Avaliação Continuada 2 (AC2) | 30% | Entrega e apresentação do projeto, com foco em gestão, backlog, páginas e benchmarking. |
+| Avaliação Geral (AG) | 10% | O slide informa o peso, mas não detalha o formato. |
+| Avaliação Final (AF) | 45% | Documentação completa do projeto em formato de “mini TCC”. |
+
+A apresentação informa que AC2 e AF são realizadas em grupo com a mesma composição definida na primeira atividade. Não atribuímos um formato à AG porque ele não está especificado no trecho recebido.

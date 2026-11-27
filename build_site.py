@@ -367,7 +367,7 @@ def build_lessons(site_root: Path) -> None:
             example_link = (
                 '<div class="callout"><strong>Arquivos práticos da aula:</strong> '
                 f'<a class="example-link" href="../exemplos/{slug}/index.html">'
-                "Abrir exemplo resolvido no navegador</a>"
+                "Abrir site prático da aula</a>"
             )
             if (example_dir / "style.css").is_file():
                 example_link += (
@@ -505,4 +505,3 @@ if __name__ == "__main__":
         build()
     except Exception as error:
         raise SystemExit(f"ERRO AO GERAR O SITE: {error}") from error
-
