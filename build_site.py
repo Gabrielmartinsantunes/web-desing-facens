@@ -1,14 +1,20 @@
-from __future__ import annotations
+        from __future__ import annotations
 
+from html import escape
 from pathlib import Path
-import shutil
 import re
+import shutil
+import tempfile
+from urllib.parse import unquote, urlsplit
+
 import mistune
+
 
 ROOT = Path(__file__).resolve().parent
 DOCS = ROOT / "docs"
 SITE = ROOT / "site"
 EXAMPLES = ROOT / "exemplos"
+BUILD_DIR = ROOT / ".site-build-tmp"
 
 LESSONS = [
     ("aula-01", "Apresentação da Disciplina", "Organização acadêmica e visão geral"),
@@ -21,7 +27,9 @@ LESSONS = [
     ("aula-08", "JavaScript: Sintaxe e Estruturas", "Variáveis, lógica e DOM"),
 ]
 
-MARKDOWN = mistune.create_markdown(plugins=["table", "task_lists", "strikethrough"])
+MARKDOWN = mistune.create_markdown(
+    plugins=["table", "task_lists", "strikethrough"]
+)
 
 STYLE = r"""/* Apostila acadêmica — identidade visual editorial. */
 :root {
@@ -121,46 +129,134 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 """
 
 SCRIPT = r"""(() => {
+  'use strict';
+
   const search = document.querySelector('#lesson-search');
-  const links = [...document.querySelectorAll('.nav-list li')];
-  const empty = document.querySelector('.empty-search');
+  const items = [...document.querySelectorAll('.nav-list li')];
+  const emptyMessage = document.querySelector('.empty-search');
 
   if (search) {
     search.addEventListener('input', () => {
       const term = search.value.trim().toLocaleLowerCase('pt-BR');
-      let visible = 0;
-      links.forEach((item) => {
-        const match = item.textContent.toLocaleLowerCase('pt-BR').includes(term);
-        item.hidden = !match;
-        if (match) visible += 1;
+      let visibleCount = 0;
+
+      items.forEach((item) => {
+        const matches = item.textContent.toLocaleLowerCase('pt-BR').includes(term);
+        item.hidden = !matches;
+        if (matches) visibleCount += 1;
       });
-      if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
+
+      if (emptyMessage) {
+        emptyMessage.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
     });
   }
 
   const printButton = document.querySelector('[data-print-page]');
-  if (printButton) printButton.addEventListener('click', () => window.print());
+  if (printButton) {
+    printButton.addEventListener('click', () => window.print());
+  }
 })();
 """
 
 
-def html_shell(title: str, subtitle: str, content: str, active: str | None, depth: int, prev_next=None) -> str:
-    prefix = "../" if depth else ""
-    nav_items = [f'<li><a href="{prefix}index.html"{" aria-current=\"page\"" if active == "home" else ""}>Início</a></li>']
-    for idx, (slug, name, topic) in enumerate(LESSONS, 1):
-        current = ' aria-current="page"' if active == slug else ''
-        nav_items.append(
-            f'<li><a href="{prefix}aulas/{slug}.html"{current}><span class="nav-number">{idx:02d}</span>{name}</a></li>'
-        )
-    current = ' aria-current="page"' if active == "project" else ''
-    nav_items.append(f'<li><a href="{prefix}projetos/pastelaria-da-sogra.html"{current}>Projeto em grupo: Pastelaria</a></li>')
+def validate_project() -> None:
+    """Confere os arquivos obrigatórios antes de iniciar a geração."""
+    required_files = [
+        DOCS / "index.md",
+        DOCS / "projetos" / "pastelaria-da-sogra.md",
+        ROOT / "requirements.txt",
+    ]
+    required_files.extend(DOCS / "aulas" / f"{slug}.md" for slug, _, _ in LESSONS)
 
-    prev_html = ""
-    if prev_next:
-        before, after = prev_next
-        prev_link = f'<a href="{before[0]}">← {before[1]}</a>' if before else '<span></span>'
-        next_link = f'<a href="{after[0]}">{after[1]} →</a>' if after else '<span></span>'
-        prev_html = f'<nav class="page-nav" aria-label="Navegação entre capítulos">{prev_link}{next_link}</nav>'
+    missing = [str(path.relative_to(ROOT)) for path in required_files if not path.is_file()]
+    if missing:
+        formatted = "\n - ".join(missing)
+        raise FileNotFoundError(
+            "Não foi possível gerar a apostila. Arquivos obrigatórios ausentes:\n - "
+            + formatted
+        )
+
+    if not EXAMPLES.is_dir():
+        raise FileNotFoundError(
+            "A pasta 'exemplos/' não foi encontrada. Ela é necessária para copiar os projetos de aula."
+        )
+
+
+def render_markdown(path: Path) -> str:
+    """Converte um arquivo Markdown em HTML e remove seu H1 duplicado."""
+    source = path.read_text(encoding="utf-8")
+    source = re.sub(r"\A# [^\n]*\n+", "", source, count=1)
+    return MARKDOWN(source)
+
+
+def build_navigation(prefix: str, active: str | None) -> str:
+    """Monta o menu lateral sem expressões complexas dentro de f-strings."""
+    home_current = ' aria-current="page"' if active == "home" else ""
+    nav_items = [
+        f'<li><a href="{prefix}index.html"{home_current}>Início</a></li>'
+    ]
+
+    for number, (slug, name, _) in enumerate(LESSONS, start=1):
+        current = ' aria-current="page"' if active == slug else ""
+        safe_name = escape(name)
+        nav_items.append(
+            f'<li><a href="{prefix}aulas/{slug}.html"{current}>'
+            f'<span class="nav-number">{number:02d}</span>{safe_name}</a></li>'
+        )
+
+    project_current = ' aria-current="page"' if active == "project" else ""
+    nav_items.append(
+        f'<li><a href="{prefix}projetos/pastelaria-da-sogra.html"{project_current}>'
+        "Projeto em grupo: Pastelaria</a></li>"
+    )
+    return "\n".join(nav_items)
+
+
+def build_page_navigation(prev_next: tuple | None) -> str:
+    if prev_next is None:
+        return ""
+
+    before, after = prev_next
+    # Os arquivos de aula ficam todos no mesmo diretório (site/aulas/).
+    # Portanto, os links de navegação usam apenas o nome do arquivo; não
+    # devem receber o prefixo ../ utilizado pelo menu lateral.
+    if before:
+        prev_link = (
+            f'<a href="{before[0]}">'
+            f'← {escape(before[1])}</a>'
+        )
+    else:
+        prev_link = "<span></span>"
+
+    if after:
+        next_link = (
+            f'<a href="{after[0]}">'
+            f'{escape(after[1])} →</a>'
+        )
+    else:
+        next_link = "<span></span>"
+
+    return (
+        '<nav class="page-nav" aria-label="Navegação entre capítulos">'
+        f"{prev_link}{next_link}</nav>"
+    )
+
+
+def html_shell(
+    title: str,
+    subtitle: str,
+    content: str,
+    active: str | None,
+    depth: int,
+    prev_next: tuple | None = None,
+) -> str:
+    """Aplica o layout editorial comum às páginas da apostila."""
+    prefix = "../" if depth else ""
+    safe_title = escape(title)
+    safe_subtitle = escape(subtitle)
+    navigation = build_navigation(prefix, active)
+    page_navigation = build_page_navigation(prev_next)
 
     return f'''<!doctype html>
 <html lang="pt-BR">
@@ -168,7 +264,7 @@ def html_shell(title: str, subtitle: str, content: str, active: str | None, dept
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Apostila acadêmica de Web Design da FACENS, organizada por aulas e exemplos práticos.">
-  <title>{title} | Apostila Web Design — FACENS</title>
+  <title>{safe_title} | Apostila Web Design — FACENS</title>
   <link rel="stylesheet" href="{prefix}assets/css/estilo.css">
   <script src="{prefix}assets/js/site.js" defer></script>
 </head>
@@ -187,15 +283,15 @@ def html_shell(title: str, subtitle: str, content: str, active: str | None, dept
       <h2 class="sidebar-heading">Sumário</h2>
       <label class="search-label" for="lesson-search">Localizar conteúdo</label>
       <input id="lesson-search" type="search" placeholder="Buscar uma aula..." autocomplete="off">
-      <ul class="nav-list">{''.join(nav_items)}</ul>
+      <ul class="nav-list">{navigation}</ul>
       <p class="empty-search">Nenhum item encontrado.</p>
       <div class="sidebar-meta">O número das aulas segue os títulos dos oito PDFs recebidos, não a numeração dos encontros no plano de aprendizagem.</div>
     </aside>
-    <main class="paper">
+    <main class="paper" id="conteudo">
       <div class="page-tools"><button type="button" data-print-page>Imprimir capítulo</button></div>
-      <div class="page-heading"><p class="eyebrow">Caderno acadêmico · Web Design</p><h1>{title}</h1><p>{subtitle}</p></div>
+      <div class="page-heading"><p class="eyebrow">Caderno acadêmico · Web Design</p><h1>{safe_title}</h1><p>{safe_subtitle}</p></div>
       <article class="prose">{content}</article>
-      {prev_html}
+      {page_navigation}
     </main>
   </div>
   <footer class="site-footer">
@@ -206,70 +302,207 @@ def html_shell(title: str, subtitle: str, content: str, active: str | None, dept
 </html>'''
 
 
-def render_markdown(path: Path) -> str:
-    source = path.read_text(encoding="utf-8")
-    # O título principal já aparece no cabeçalho do layout; evita dois h1 na mesma página.
-    source = re.sub(r"\A# [^\n]*\n+", "", source, count=1)
-    return MARKDOWN(source)
+def build_home(site_root: Path) -> None:
+    home_content = render_markdown(DOCS / "index.md")
+    cards = ['<div class="home-grid" aria-label="Acesso às aulas">']
 
-
-def build():
-    if SITE.exists():
-        shutil.rmtree(SITE)
-    (SITE / "assets/css").mkdir(parents=True, exist_ok=True)
-    (SITE / "assets/js").mkdir(parents=True, exist_ok=True)
-    (SITE / "aulas").mkdir(parents=True, exist_ok=True)
-    (SITE / "projetos").mkdir(parents=True, exist_ok=True)
-
-    (SITE / "assets/css/estilo.css").write_text(STYLE, encoding="utf-8")
-    (SITE / "assets/js/site.js").write_text(SCRIPT, encoding="utf-8")
-    (SITE / ".nojekyll").write_text("", encoding="utf-8")
-
-    # Home — acrescenta cartões de acesso sem duplicar a tabela da página-fonte.
-    home = render_markdown(DOCS / "index.md")
-    cards = '<div class="home-grid">'
-    for idx, (slug, name, topic) in enumerate(LESSONS, 1):
-        cards += f'<section class="home-card"><h3>Aula {idx:02d} · {name}</h3><p>{topic}</p><a href="aulas/{slug}.html">Estudar esta aula</a></section>'
-    cards += '<section class="home-card"><h3>Projeto em grupo</h3><p>Uma referência prática para relacionar os conteúdos ao projeto Pastelaria da Sogra.</p><a href="projetos/pastelaria-da-sogra.html">Consultar a referência</a></section></div>'
-    home = home.replace('<h3>Conteúdo</h3>', '<h3>Conteúdo</h3>' + cards)
-    home = home.replace('../projetos/pastelaria-da-sogra.html', 'projetos/pastelaria-da-sogra.html')
-    (SITE / "index.html").write_text(html_shell("Apostila Acadêmica de Web Design", "FACENS · Engenharia da Computação · Oito aulas organizadas para estudo", home, "home", 0), encoding="utf-8")
-
-    for idx, (slug, name, topic) in enumerate(LESSONS):
-        md_path = DOCS / "aulas" / f"{slug}.md"
-        content = render_markdown(md_path)
-        example = EXAMPLES / slug
-        if (example / "index.html").exists():
-            example_link = f'<div class="callout"><strong>Arquivos práticos da aula:</strong> <a class="example-link" href="../exemplos/{slug}/index.html">Abrir exemplo resolvido no navegador</a>'
-            if (example / "style.css").exists():
-                example_link += f' <a href="../exemplos/{slug}/style.css">Ver CSS</a>'
-            if (example / "script.js").exists():
-                example_link += f' · <a href="../exemplos/{slug}/script.js">Ver JavaScript</a>'
-            example_link += '</div>'
-        else:
-            example_link = '<div class="callout"><strong>Atividade sem código:</strong> esta aula solicita a organização do grupo e o envio dos integrantes no Canvas. O procedimento e um modelo preenchível estão descritos nesta página.</div>'
-        # Place the project link after the main title within the markdown body.
-        first_end = content.find('</h1>')
-        if first_end >= 0:
-            content = content[:first_end + 5] + example_link + content[first_end + 5:]
-        prev_item = None if idx == 0 else (f"aula-{idx:02d}.html", f"Aula {idx:02d}")
-        next_item = None if idx == len(LESSONS) - 1 else (f"aula-{idx+2:02d}.html", f"Aula {idx+2:02d}")
-        (SITE / "aulas" / f"{slug}.html").write_text(
-            html_shell(f"Aula {idx+1:02d} — {name}", topic, content, slug, 1, (prev_item, next_item)),
-            encoding="utf-8",
+    for number, (slug, name, topic) in enumerate(LESSONS, start=1):
+        cards.append(
+            '<section class="home-card">'
+            f'<h3>Aula {number:02d} · {escape(name)}</h3>'
+            f'<p>{escape(topic)}</p>'
+            f'<a href="aulas/{slug}.html">Estudar esta aula</a>'
+            '</section>'
         )
 
-    project = render_markdown(DOCS / "projetos/pastelaria-da-sogra.md")
-    (SITE / "projetos/pastelaria-da-sogra.html").write_text(
-        html_shell("Projeto de referência — Pastelaria da Sogra", "Trabalho acadêmico desenvolvido em grupo", project, "project", 1),
+    cards.append(
+        '<section class="home-card">'
+        '<h3>Projeto em grupo</h3>'
+        '<p>Uma referência prática para relacionar os conteúdos ao projeto Pastelaria da Sogra.</p>'
+        '<a href="projetos/pastelaria-da-sogra.html">Consultar a referência</a>'
+        '</section>'
+    )
+    cards.append("</div>")
+    cards_html = "".join(cards)
+
+    # Insere os cartões logo após o título Conteúdo. Se o título for alterado,
+    # adiciona os cartões ao final em vez de simplesmente descartá-los.
+    heading_pattern = re.compile(r"(<h3>\s*Conteúdo\s*</h3>)", flags=re.IGNORECASE)
+    if heading_pattern.search(home_content):
+        home_content = heading_pattern.sub(
+            lambda match: match.group(1) + cards_html,
+            home_content,
+            count=1,
+        )
+    else:
+        home_content += cards_html
+
+    # O Markdown da página inicial usa um caminho relativo ao diretório docs/.
+    home_content = home_content.replace(
+        "../projetos/pastelaria-da-sogra.html",
+        "projetos/pastelaria-da-sogra.html",
+    )
+
+    page = html_shell(
+        "Apostila Acadêmica de Web Design",
+        "FACENS · Engenharia da Computação · Oito aulas organizadas para estudo",
+        home_content,
+        "home",
+        0,
+    )
+    (site_root / "index.html").write_text(page, encoding="utf-8")
+
+
+def build_lessons(site_root: Path) -> None:
+    lessons_dir = site_root / "aulas"
+    lessons_dir.mkdir(parents=True, exist_ok=True)
+
+    for index, (slug, name, topic) in enumerate(LESSONS):
+        markdown_path = DOCS / "aulas" / f"{slug}.md"
+        content = render_markdown(markdown_path)
+        example_dir = EXAMPLES / slug
+        example_index = example_dir / "index.html"
+
+        if example_index.is_file():
+            example_link = (
+                '<div class="callout"><strong>Arquivos práticos da aula:</strong> '
+                f'<a class="example-link" href="../exemplos/{slug}/index.html">'
+                "Abrir exemplo resolvido no navegador</a>"
+            )
+            if (example_dir / "style.css").is_file():
+                example_link += (
+                    f' <a href="../exemplos/{slug}/style.css">Ver CSS</a>'
+                )
+            if (example_dir / "script.js").is_file():
+                example_link += (
+                    f' · <a href="../exemplos/{slug}/script.js">Ver JavaScript</a>'
+                )
+            example_link += "</div>"
+            # O H1 do Markdown é removido porque o layout já fornece o título.
+            # Por isso, o bloco de exemplo deve ser inserido no início do artigo.
+            content = example_link + content
+        elif slug == "aula-01":
+            # A atividade desta aula é administrativa e não requer código.
+            pass
+        else:
+            content = (
+                '<div class="callout"><strong>Exemplo ainda não disponível:</strong> '
+                "os arquivos práticos desta aula não foram encontrados na pasta exemplos.</div>"
+                + content
+            )
+
+        previous = None if index == 0 else (
+            f"aula-{index:02d}.html",
+            f"Aula {index:02d}",
+        )
+        following = None if index == len(LESSONS) - 1 else (
+            f"aula-{index + 2:02d}.html",
+            f"Aula {index + 2:02d}",
+        )
+
+        page = html_shell(
+            f"Aula {index + 1:02d} — {name}",
+            topic,
+            content,
+            slug,
+            1,
+            (previous, following),
+        )
+        (lessons_dir / f"{slug}.html").write_text(page, encoding="utf-8")
+
+
+def build_project_page(site_root: Path) -> None:
+    project_content = render_markdown(
+        DOCS / "projetos" / "pastelaria-da-sogra.md"
+    )
+    page = html_shell(
+        "Projeto de referência — Pastelaria da Sogra",
+        "Trabalho acadêmico desenvolvido em grupo",
+        project_content,
+        "project",
+        1,
+    )
+    project_dir = site_root / "projetos"
+    project_dir.mkdir(parents=True, exist_ok=True)
+    (project_dir / "pastelaria-da-sogra.html").write_text(
+        page,
         encoding="utf-8",
     )
 
-    # Copia os projetos executáveis sem modificar a estrutura relativa de seus recursos.
-    shutil.copytree(EXAMPLES, SITE / "exemplos")
-    print(f"Site gerado em: {SITE}")
-    print(f"Páginas da apostila: {1 + len(LESSONS) + 1}")
+
+def validate_generated_site(site_root: Path) -> None:
+    """Executa verificações simples nas páginas geradas antes de publicar."""
+    expected_pages = [
+        site_root / "index.html",
+        *[site_root / "aulas" / f"{slug}.html" for slug, _, _ in LESSONS],
+        site_root / "projetos" / "pastelaria-da-sogra.html",
+    ]
+    missing = [str(path.relative_to(site_root)) for path in expected_pages if not path.is_file()]
+    if missing:
+        raise RuntimeError(
+            "A geração terminou sem produzir todas as páginas esperadas: "
+            + ", ".join(missing)
+        )
+
+    for page_path in expected_pages:
+        page_text = page_path.read_text(encoding="utf-8")
+        if "<!doctype html>" not in page_text.lower():
+            raise RuntimeError(f"Doctype ausente em {page_path.relative_to(site_root)}")
+        if '<html lang="pt-BR">' not in page_text:
+            raise RuntimeError(f"Idioma do documento ausente em {page_path.relative_to(site_root)}")
+        if "assets/css/estilo.css" not in page_text:
+            raise RuntimeError(f"CSS principal não referenciado em {page_path.relative_to(site_root)}")
+
+    if not (site_root / ".nojekyll").exists():
+        raise RuntimeError("O arquivo .nojekyll não foi criado.")
+
+
+def build() -> None:
+    """Gera a apostila em uma pasta temporária e substitui o site apenas ao final."""
+    validate_project()
+
+    if BUILD_DIR.exists():
+        shutil.rmtree(BUILD_DIR)
+
+    BUILD_DIR.mkdir(parents=True, exist_ok=True)
+    (BUILD_DIR / "assets" / "css").mkdir(parents=True, exist_ok=True)
+    (BUILD_DIR / "assets" / "js").mkdir(parents=True, exist_ok=True)
+    (BUILD_DIR / "aulas").mkdir(parents=True, exist_ok=True)
+    (BUILD_DIR / "projetos").mkdir(parents=True, exist_ok=True)
+
+    (BUILD_DIR / "assets" / "css" / "estilo.css").write_text(
+        STYLE,
+        encoding="utf-8",
+    )
+    (BUILD_DIR / "assets" / "js" / "site.js").write_text(
+        SCRIPT,
+        encoding="utf-8",
+    )
+    (BUILD_DIR / ".nojekyll").write_text("", encoding="utf-8")
+
+    build_home(BUILD_DIR)
+    build_lessons(BUILD_DIR)
+    build_project_page(BUILD_DIR)
+
+    # Mantém os caminhos relativos dos exemplos e suas mídias.
+    shutil.copytree(EXAMPLES, BUILD_DIR / "exemplos")
+
+    validate_generated_site(BUILD_DIR)
+
+    # Só substitui a pasta site/ depois que toda a geração e validação terminar.
+    if SITE.exists():
+        shutil.rmtree(SITE)
+    BUILD_DIR.rename(SITE)
+
+    page_count = 1 + len(LESSONS) + 1
+    print(f"Site gerado com sucesso em: {SITE}")
+    print(f"Páginas principais geradas: {page_count}")
+    print("Verificações básicas: OK")
 
 
 if __name__ == "__main__":
-    build()
+    try:
+        build()
+    except Exception as error:
+        raise SystemExit(f"ERRO AO GERAR O SITE: {error}") from error
+
